@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Redmon by steelThread</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/steelThread/redmon">Fork On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/steelThread/redmon/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/steelThread/redmon/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Redmon</h1>
+          <p>A web interface for managing redis: cli, admin, and live monitoring</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/steelThread">steelThread</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/#!/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>Redmon</h1>
+
+<p>** Work in progress in the very early stages of dev **</p>
+
+<p>Simple sinatra based dashbord for redis.  After seeing the <a href="https://github.com/paulasmuth/fnordmetric">fnordmetric</a>
+project I was inspired to write this.  Some of the ideas there have be carried over here.</p>
+
+<hr><p>Watch your redis server live.</p>
+
+<p><img src="http://dl.dropbox.com/u/27525257/dash-new.png" alt=""></p>
+
+<hr><p>Interact with redis using a familiar cli interface.</p>
+
+<p><img src="http://dl.dropbox.com/u/27525257/cli.png" alt=""></p>
+
+<hr><p>Dynamically update your server configuration.</p>
+
+<p><img src="http://dl.dropbox.com/u/27525257/configuration-new.png" alt=""></p>
+
+<hr><p>Intuitively introspect registered keys.  ** Coming Soon **</p>
+
+<hr><h2>Usage</h2>
+
+<p>Note:  Current version of Redmon is dependent on <a href="http://www.highcharts.com/">Highcharts JS v2.1.9</a> which is not included with this repo and requires a license.  This will be replaced with something open source friendly in the future.  In the meantime you can download highcharts and put the highcharts.js file in public/vendor to get things working.  Do it!</p>
+
+<p>Currently not a registered gem, but soon.  For now clone the repo and start the app as demonstrated below</p>
+
+<div class="highlight">
+<pre><span class="nv">$ </span>bundle install
+<span class="nv">$ </span>bundle <span class="nb">exec </span>bin/redmon -h
+Usage: bin/redmon <span class="o">(</span>options<span class="o">)</span>
+    -a, --address ADDRESS            The thin <span class="nb">bind </span>address <span class="k">for </span>the app <span class="o">(</span>default: 0.0.0.0<span class="o">)</span>
+    -n, --namespace NAMESPACE        The root Redis namespace <span class="o">(</span>default: redmon<span class="o">)</span>
+    -i, --interval SECS              Poll interval in secs <span class="k">for </span>the worker <span class="o">(</span>default: 10<span class="o">)</span>
+    -p, --port PORT                  The thin <span class="nb">bind </span>port <span class="k">for </span>the app <span class="o">(</span>default: 4567<span class="o">)</span>
+    -r, --redis URL                  The Redis url <span class="k">for </span>monitor <span class="o">(</span>default: redis://127.0.0.1:6379<span class="o">)</span>
+        --no-app                     Do not run the web app to present stats
+        --no-worker                  Do not run a worker to collect the stats
+<span class="nv">$ </span>bundle <span class="nb">exec </span>bin/redmon
+&gt;&gt; Thin web server <span class="o">(</span>v1.3.1 codename Triple Espresso<span class="o">)</span>
+&gt;&gt; Maximum connections <span class="nb">set </span>to 1024
+&gt;&gt; Listening on 0.0.0.0:4567, CTRL+C to stop
+<span class="o">[</span>12-03-10 15:49:40<span class="o">]</span> listening on http#0.0.0.0:4567
+</pre>
+</div>
+
+
+<p>If you want to simulate a weak load on redis</p>
+
+<div class="highlight">
+<pre><span class="nv">$ </span>ruby load_sim.rb
+</pre>
+</div>
+
+
+<p>Open your browser to 0.0.0.0:4567</p>
+
+<h2>License</h2>
+
+<p>Copyright (c) 2012 Sean McDaniel</p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to use, copy and modify copies of the Software, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+  </body>
+</html>
