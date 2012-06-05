@@ -8,6 +8,7 @@
     %script(type="text/javascript" src="vendor/jquery.editinplace.js")
     %script(type="text/javascript" src="vendor/jquery.flot.js")
     %script(type="text/javascript" src="vendor/bootstrap-modal.js")
+    %script(type="text/javascript" src="vendor/bootstrap-dropdown.js")
     %script(type="text/javascript" src="vendor/terminal.js")
     %script(type="text/javascript" src="redmon.js")
 
@@ -28,11 +29,19 @@
               %a CLI
             %li{:id => 'config'}
               %a Configuration
+            %li.menu{:data => {:dropdown => :dropdown}}
+              %a.menu Select Instance
+              %ul.menu-dropdown
+                - @redises.each do |redis|
+                  %li
+                    %a{:id => "redis-#{redis.redis_port}", href: "?redis=#{redis.redis_url}"}= redis.redis_url
           .pull-right
-            %a.brand #{redis_url}
+            %a.brand= @redis_url
             .btns
               %button.btn.primary{:id => 'flush-btn'} Flush DB
               %button.btn.primary{:id => 'reset-btn'} Reset Statistics
+              - if Redmon[:discover]
+                %a.btn.primary{:href => '/discover'} Rediscover Instances
 
     .container.viewport
       .dashboard
@@ -69,7 +78,10 @@
                 %table.condensed-table{:id => "info-tbl"}
                   %tbody
                     %tr
-                      %td{:style => "width: 65%"} Version
+                      %td{:style => "width: 65%"} Namespace Key
+                      %td= redis(@redis_url).stats_key
+                    %tr
+                      %td Version
                       %td{:id => "redis_version"}
                     %tr
                       %td Role
@@ -77,6 +89,9 @@
                     %tr
                       %td Uptime Days
                       %td{:id => "uptime_in_days"}
+                    %tr
+                      %td Process ID
+                      %td{:id => 'process_id'}
                     %tr
                       %td Memory Used
                       %td{:id => "used_memory_human"}
@@ -153,7 +168,7 @@
                 %h2 Parameters
               %table.condensed-table{:id => "config-table"}
                 %tbody
-                - config.each do |k,v|
+                - @config.each do |k,v|
                   %tr
                     %td{:style => "width: 20%"}= k
                     %td
@@ -173,6 +188,6 @@
   $(document).ready(function() {
     Redmon.init({
       pollInterval : #{poll_interval},
-      cliPrompt    : "#{prompt}"
+      cliPrompt    : "#{prompt(@redis_url)}"
     });
   });

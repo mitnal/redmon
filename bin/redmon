@@ -27,6 +27,28 @@ class RedmonCLI
     :default     => 'redis://127.0.0.1:6379',
     :description => "The Redis url for monitor (default: redis://127.0.0.1:6379)"
 
+  option :redis_urls,
+    :short       => '-R URL,URL',
+    :long        => '--redis-urls URL,URL',
+    :description => 'Redis urls to monitor, comma seperated list.'
+
+  option :discover,
+    :on          => :tail,
+    :long        => '--no-discover',
+    :boolean     => true,
+    :default     => true,
+    :description => 'Do not discover redis versions in given port range.'
+
+  option :discover_from,
+    :long        => '--discover-from PORT',
+    :default     => 6379,
+    :description => 'Discover redis server from this port on.'
+
+  option :discover_to,
+    :long        => '--discover-to PORT',
+    :default     => 6400,
+    :description => 'Discover redis server from this port on.'
+
   option :namespace,
     :short       => '-n NAMESPACE',
     :long        => '--namespace NAMESPACE',
@@ -56,8 +78,28 @@ class RedmonCLI
 
   def parse
     parse_options
-    config[:web_interface] = web_interface
+    config[:web_interface]  = web_interface
+    config[:redis_urls]     = redis_urls
+    config[:discover_range] = discover
     config
+  end
+
+  def redis_urls
+    if config[:redis_urls] && !config[:redis_urls].empty?
+      urls = config[:redis_urls].split(',')
+      config[:redis_urls] = urls
+    else
+      config[:redis_urls] = [config[:redis_url]]
+    end
+  end
+
+  def discover
+    if config[:discover]
+      config[:discover_range] = {
+        from: config[:discover_from],
+        to:   config[:discover_to]
+      }
+    end
   end
 
   def web_interface

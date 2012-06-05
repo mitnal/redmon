@@ -39,17 +39,33 @@ $ bundle install
 $ bundle exec bin/redmon -h
 Usage: bin/redmon (options)
     -a, --address ADDRESS            The thin bind address for the app (default: 0.0.0.0)
+        --discover-from PORT         Discover redis server from this port on.
+        --discover-to PORT           Discover redis server from this port on.
     -n, --namespace NAMESPACE        The root Redis namespace (default: redmon)
     -i, --interval SECS              Poll interval in secs for the worker (default: 10)
     -p, --port PORT                  The thin bind port for the app (default: 4567)
     -r, --redis URL                  The Redis url for monitor (default: redis://127.0.0.1:6379)
+    -R, --redis-urls URL,URL         Redis urls to monitor, comma seperated list.
         --no-app                     Do not run the web app to present stats
+        --no-discover                Do not discover redis versions in given port range.
         --no-worker                  Do not run a worker to collect the stats
 $ bundle exec bin/redmon
 >> Thin web server (v1.3.1 codename Triple Espresso)
 >> Maximum connections set to 1024
 >> Listening on 0.0.0.0:4567, CTRL+C to stop
 [12-03-10 15:49:40] listening on http#0.0.0.0:4567
+```
+
+If you want to store the monitor data in another redis instance
+
+```bash
+$ bundle exec bin/redmon -r redis://127.0.0.1:6380
+```
+
+Run withou auto discovery of redis instances
+
+```bash
+$ bundle exec bin/redmon --no-discover
 ```
 
 If you want to simulate a weak load on redis

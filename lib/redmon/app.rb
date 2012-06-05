@@ -9,6 +9,9 @@ module Redmon
     helpers Redmon::Helpers
 
     get '/' do
+      @redis_url = redis_url
+      @redises = Redmon[:redis_urls].map { |url| redis(url) }
+      @config = redis(redis_url).config
       haml :app
     end
 
@@ -16,28 +19,33 @@ module Redmon
       args = params[:command].split
       @cmd = args.shift.downcase.intern
       begin
-        raise RuntimeError unless supported? @cmd
-        @result = redis.send @cmd, *args
-        @result = empty_result if @result == []
+        raise RuntimeError unless redis(redis_url).supported? @cmd
+        @result = redis(redis_url).redis.send @cmd, *args
+        @result = redis(redis_url).empty_result if @result == []
         haml :cli
       rescue ArgumentError
-        wrong_number_of_arguments_for @cmd
+        redis(redis_url).wrong_number_of_arguments_for @cmd
       rescue RuntimeError
-        unknown @cmd
+        redis(redis_url).unknown @cmd
       rescue Errno::ECONNREFUSED
-        connection_refused
+        redis(redis_url).connection_refused
       end
     end
 
     post '/config' do
       param = params[:param].intern
       value = params[:value]
-      redis.config(:set, param, value) and value
+      redis(redis_url).config(:set, param, value) and value
     end
 
     get '/stats' do
       content_type :json
-      redis.zrange(stats_key, count, -1).to_json
+      redis(Redmon[:redis_url]).redis.zrange(redis(redis_url).stats_key, count, -1).to_json
+    end
+
+    get '/discover' do
+      Redmon.discover
+      redirect '/'
     end
 
   end

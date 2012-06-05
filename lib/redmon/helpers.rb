@@ -1,9 +1,26 @@
 module Redmon
   module Helpers
-    include Redmon::Redis
 
-    def prompt
-      "#{redis_url.gsub('://', ' ')}>"
+    def connections
+      @connections ||= []
+    end
+
+    def redis_url
+      params[:redis] || Redmon[:redis_url]
+    end
+
+    def redis(url)
+      if connection = connections.select { |con| con && con[:url] == url }.first
+        connection[:redis]
+      else
+        redis = Redmon::Redis.new(url)
+        connections << { url: url, redis: redis }
+        redis
+      end
+    end
+
+    def prompt(url = Redmon[:redis_url])
+      "#{url.gsub('://', ' ')}>"
     end
 
     def poll_interval

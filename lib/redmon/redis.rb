@@ -1,6 +1,5 @@
 module Redmon
-  module Redis
-    extend self
+  class Redis
 
     UNSUPPORTED = [
       :eval,
@@ -12,8 +11,12 @@ module Redmon
       :watch
     ]
 
+    def initialize(url = Redmon[:redis_url])
+      @redis_url = url.gsub(/\w*:\w*@/, '')
+    end
+
     def redis
-      @redis ||= ::Redis.connect(:url => Redmon[:redis_url])
+      @redis ||= ::Redis.connect(:url => redis_url)
     end
 
     def ns
@@ -25,7 +28,11 @@ module Redmon
     end
 
     def redis_host
-      redis_url.gsub('redis://', '')
+      @redis_host ||= redis_url.gsub('redis://', '')
+    end
+
+    def redis_port
+      @redis_port ||= redis_url.match(/.*:(\d{4})/)[1].to_i
     end
 
     def config
